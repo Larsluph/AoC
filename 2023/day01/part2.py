@@ -2,8 +2,6 @@
 DAY 1 - PART 2
 """
 
-import re
-
 translate_table = {
     "one": "1",
     "two": "2",
@@ -16,33 +14,38 @@ translate_table = {
     "nine": "9"
 }
 
-pattern = re.compile(r"^.*?(\d).*(\d).*?$")
-
 with open('input.txt', encoding='ascii') as f:
     lines = f.readlines()
 
+def match_word(line, i) -> str | bool:
+    for k, v in translate_table.items():
+        if line[i:i+len(k)] == k:
+            return v
+
 def parse_line(line):
     # forward
-    for char in line:
+    for i in range(len(line)-1):
+        char = line[i]
         if char.isdigit():
             start = char
             break
+        elif (digit := match_word(line, i)):
+            start = digit
+            break
     # backward
-    for char in line[::-1]:
+    for i in range(len(line)-2, -1, -1):
+        char = line[i]
         if char.isdigit():
             end = char
+            break
+        elif (digit := match_word(line, i)):
+            end = digit
             break
 
     print(line, start, end)
 
-    return start, end
+    return start + end
 
-def apply_translation(line):
-    for k, v in translate_table.items():
-        line = line.replace(k, v)
-    return line
-
-formatted_lines = map(apply_translation, lines)
-calibration_values = map(parse_line, formatted_lines)
-formatted_values = map(lambda x: int(''.join(x)), calibration_values)
+calibration_values = map(parse_line, lines)
+formatted_values = map(int, calibration_values)
 print(sum(formatted_values))
