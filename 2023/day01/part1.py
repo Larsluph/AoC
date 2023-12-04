@@ -2,10 +2,6 @@
 DAY 1 - PART 1
 """
 
-import re
-
-pattern = re.compile(r"^.*?(\d).*(\d).*?$")
-
 with open('input.txt', encoding='ascii') as f:
     lines = f.readlines()
 
