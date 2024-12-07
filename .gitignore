@@ -174,3 +174,6 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+# Skip input files as per https://adventofcode.com/2024/about#faq_copying
+input*.txt
