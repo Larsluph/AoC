@@ -117,9 +117,10 @@ class Map:
         elif isinstance(tile, Wall):
             return False
         elif isinstance(tile, Box):
-            self.exec_1_step(new_x, new_y, direction)
-            # self.exec_1_step(x, y, direction)
-            return True
+            result = self.exec_1_step(new_x, new_y, direction)
+            if result:
+                self._map[y][x], self._map[new_y][new_x] = self._map[new_y][new_x], self._map[y][x]
+            return result
         else:
             raise ValueError(tile)
 
@@ -129,7 +130,14 @@ class Map:
             if self.exec_1_step(x, y, instruction):
                 dx, dy = instruction.delta
                 self.robot_pos = x+dx, y+dy
-            self.render_map()
+
+    def calc_total(self):
+        total = 0
+        for y, row in enumerate(self._map):
+            for x, tile in enumerate(row):
+                if isinstance(tile, Box):
+                    total += 100*y + x
+        return total
 
 
 warehouse_map = Map()
@@ -145,3 +153,4 @@ with open('input.txt', encoding='ascii') as f:
             l.strip())
 
 warehouse_map.exec()
+print(warehouse_map.calc_total())
